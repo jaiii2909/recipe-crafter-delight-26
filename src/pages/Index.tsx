@@ -1,15 +1,17 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Search, Heart, Clock, Users, Filter, History } from "lucide-react";
+import { Search, Heart, Clock, Users, Filter, History, Calendar, BarChart } from "lucide-react";
 import RecipeCard from "@/components/RecipeCard";
 import RecipeDetail from "@/components/RecipeDetail";
 import SearchFilters from "@/components/SearchFilters";
 import FavoritesList from "@/components/FavoritesList";
+import MealPlanner from "@/components/MealPlanner";
+import AnalyticsDashboard from "@/components/AnalyticsDashboard";
+import ThemeToggle from "@/components/ThemeToggle";
 import { searchRecipesByIngredients, getRecipeDetails, Recipe, RecipeDetail as RecipeDetailType } from "@/utils/recipeApi";
 import { getFavorites, addToFavorites, removeFromFavorites } from "@/utils/localStorage";
 import { useToast } from "@/hooks/use-toast";
@@ -134,22 +136,33 @@ const Index = () => {
     });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-green-50">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-green-50 dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4 py-8">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">Recipe Finder</h1>
-          <p className="text-lg text-gray-600">Discover delicious recipes based on your ingredients</p>
+        <header className="text-center mb-8 relative">
+          <div className="absolute top-0 right-0">
+            <ThemeToggle />
+          </div>
+          <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-200 mb-2">Recipe Finder</h1>
+          <p className="text-lg text-gray-600 dark:text-gray-400">Discover delicious recipes based on your ingredients</p>
         </header>
 
         <Tabs defaultValue="search" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-8">
+          <TabsList className="grid w-full grid-cols-5 mb-8">
             <TabsTrigger value="search" className="flex items-center gap-2">
               <Search className="w-4 h-4" />
-              Search Recipes
+              Search
             </TabsTrigger>
             <TabsTrigger value="favorites" className="flex items-center gap-2">
               <Heart className="w-4 h-4" />
-              My Favorites ({favorites.length})
+              Favorites ({favorites.length})
+            </TabsTrigger>
+            <TabsTrigger value="planner" className="flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
+              Meal Planner
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center gap-2">
+              <BarChart className="w-4 h-4" />
+              Analytics
             </TabsTrigger>
           </TabsList>
 
@@ -179,7 +192,7 @@ const Index = () => {
                 {/* Search History */}
                 {searchHistory.length > 0 && (
                   <div className="space-y-2">
-                    <p className="text-sm font-medium text-gray-600 flex items-center gap-1">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400 flex items-center gap-1">
                       <History className="w-4 h-4" />
                       Recent Searches:
                     </p>
@@ -188,7 +201,7 @@ const Index = () => {
                         <Badge
                           key={index}
                           variant="secondary"
-                          className="cursor-pointer hover:bg-orange-100"
+                          className="cursor-pointer hover:bg-orange-100 dark:hover:bg-orange-900"
                           onClick={() => setSearchTerm(term)}
                         >
                           {term}
@@ -227,8 +240,8 @@ const Index = () => {
               <Card className="text-center py-12">
                 <CardContent>
                   <Search className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-600 mb-2">Start Your Recipe Search</h3>
-                  <p className="text-gray-500">Enter some ingredients above to find delicious recipes!</p>
+                  <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">Start Your Recipe Search</h3>
+                  <p className="text-gray-500 dark:text-gray-500">Enter some ingredients above to find delicious recipes!</p>
                 </CardContent>
               </Card>
             )}
@@ -240,6 +253,14 @@ const Index = () => {
               onFavoriteToggle={handleFavoriteToggle}
               onRecipeClick={handleRecipeClick}
             />
+          </TabsContent>
+
+          <TabsContent value="planner">
+            <MealPlanner />
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <AnalyticsDashboard />
           </TabsContent>
         </Tabs>
 
