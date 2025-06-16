@@ -1,10 +1,14 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { TrendingUp, Heart, Search, Calendar } from "lucide-react";
 import { getFavorites, getSearchHistory } from "@/utils/localStorage";
+import { Recipe } from "@/utils/recipeApi";
+
+interface MealPlan {
+  [key: string]: Recipe[];
+}
 
 interface Analytics {
   totalFavorites: number;
@@ -29,7 +33,7 @@ const AnalyticsDashboard = () => {
     const calculateAnalytics = () => {
       const favorites = getFavorites();
       const searchHistory = getSearchHistory();
-      const mealPlan = JSON.parse(localStorage.getItem('mealPlan') || '{}');
+      const mealPlan: MealPlan = JSON.parse(localStorage.getItem('mealPlan') || '{}');
 
       // Calculate cuisine distribution
       const cuisineCount: { [key: string]: number } = {};
@@ -55,7 +59,7 @@ const AnalyticsDashboard = () => {
         .slice(0, 5);
 
       // Calculate meal plan stats
-      const totalPlannedMeals = Object.values(mealPlan).reduce((total: number, meals: any) => total + meals.length, 0);
+      const totalPlannedMeals = Object.values(mealPlan).reduce((total: number, meals: Recipe[]) => total + meals.length, 0);
       const daysWithMeals = Object.keys(mealPlan).filter(date => mealPlan[date].length > 0).length;
 
       setAnalytics({
