@@ -168,4 +168,4 @@ Pull requests are welcome! To contribute:
 
 ## Links
 
-- [Live Demo (if available)](https://github.com/jaiii2909/recipe-crafter-delight-26)
+- [Live Demo](https://recipe-crafter-delight-26.lovable.app/)
